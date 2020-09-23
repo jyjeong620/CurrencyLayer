@@ -1,6 +1,5 @@
 package com.jyjeong.currencylayer.service;
 
-import com.jyjeong.currencylayer.dto.CurrencyLayerDto;
 import com.jyjeong.currencylayer.dto.QuotesDto;
 
 import java.math.BigDecimal;

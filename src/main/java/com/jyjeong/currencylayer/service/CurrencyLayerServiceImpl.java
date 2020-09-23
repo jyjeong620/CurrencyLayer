@@ -1,18 +1,11 @@
 package com.jyjeong.currencylayer.service;
 
 
-import com.jyjeong.currencylayer.dto.CurrencyLayerDto;
-import com.jyjeong.currencylayer.dto.DataDto;
 import com.jyjeong.currencylayer.dto.QuotesDto;
 import com.jyjeong.currencylayer.repository.QuotesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,11 +15,7 @@ import java.util.List;
 public class CurrencyLayerServiceImpl implements CurrencyLayerService {
 
     @Autowired
-    Environment environment;
-
-    @Autowired
     QuotesRepository quotesRepository;
-
 
     /**
      * 저장된 국가코드, 환율 반환

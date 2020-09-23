@@ -1,13 +1,10 @@
 package com.jyjeong.currencylayer.controller;
 
-import com.jyjeong.currencylayer.dto.CurrencyLayerDto;
 import com.jyjeong.currencylayer.service.CurrencyLayerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 
@@ -17,7 +14,6 @@ public class CurrencyLayerController {
 
     @Autowired
     CurrencyLayerService currencylayerService;
-
 
     /**
      * 메인화면
@@ -47,7 +43,6 @@ public class CurrencyLayerController {
             return null;
         }
     }
-
 
     /**
      * 입력받은 국가코드를 환율로 변환 
