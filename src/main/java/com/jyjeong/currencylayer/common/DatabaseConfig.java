@@ -40,7 +40,7 @@ public class DatabaseConfig implements ApplicationRunner {
 
             Statement stmt = conn.createStatement();
 
-            String sql = "CREATE TABLE CURRENCYINFO(stdCountryCode CHAR(3) NOT NULL, currencyRate DECIMAL(20,6), PRIMARY KEY (stdCountryCode) )";
+            String sql = "CREATE TABLE CURRENCYINFO(stdCountryCode CHAR(3) NOT NULL, currencyRate DECIMAL(20,9), PRIMARY KEY (stdCountryCode) )";
             stmt.executeUpdate(sql);
 
 
@@ -66,14 +66,16 @@ public class DatabaseConfig implements ApplicationRunner {
                 .queryParam("source",environment.getProperty("API_SOURCE"))
                 .queryParam("format",environment.getProperty("API_FORMAT"))
                 .build(false);    //자동으로 encode해주는 것을 막기 위해 false
-
+        log.info("API Get :: GET URL : " + apiUrl.toUriString());
         ResponseEntity<DataDto> dataDto = restTemplate.getForEntity(apiUrl.toUriString(), DataDto.class);
 
         if(!dataDto.getBody().isSuccess()){
             //에러처리
             return null;
         }
-
-        return dataDto;
+        else {
+            log.info("API GET :: SUCCESS ");
+            return dataDto;
+        }
     }
 }
