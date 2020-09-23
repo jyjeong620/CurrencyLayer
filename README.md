@@ -1,2 +1,1 @@
-# currencylayer
-환율 계산기
+# currencylayer(환율계산)
