@@ -1,6 +1,5 @@
 package com.jyjeong.currencylayer;
 
-import com.jyjeong.currencylayer.dto.CurrencyLayerDto;
 import com.jyjeong.currencylayer.dto.DataDto;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,13 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.math.BigDecimal;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @RunWith(SpringRunner.class)
-class CurrencylayerApplicationTests {
+class CurrencyLayerApplicationTests {
 
 	@Test
 	void contextLoads() {
@@ -43,15 +39,13 @@ class CurrencylayerApplicationTests {
 
 	@Test
 	public void getDate() throws Exception{
-		mockMvc.perform(get("/currencyRate?stdCountryCode=KRW"))
+		mockMvc.perform(get("/getCurrencyRate?stdCountryCode=KRW"))
 				.andDo(print())
 				.andExpect(status().isOk());
 	}
 
 	@Test
 	public void getReceivedAmount() throws Exception {
-		CurrencyLayerDto currencylayerDto = new CurrencyLayerDto();
-
 		mockMvc.perform(post("/getReceivedAmount")
 				.param("stdCountryName","KRW")
 				.param("remittance","1000"))
