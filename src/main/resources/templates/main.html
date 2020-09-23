@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="../js/jquery.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<h1>환율계산</h1>
+<h2></h2>
+<table>
+    <tr>
+        <td>송금국가:</td>
+        <td>미국(USD)</td>
+    </tr>
+    <tr>
+        <td>수취국가:</td>
+        <td>
+            <select class="stdCountryCode" name = "stdCountryCode" id = "stdCountryCode" >
+<!--                    <option value=""> 기본 </option>-->
+<!--                    <option th:each="quotes : ${quotes}"-->
+<!--                            th:value="${quotes.stdCountryCode}"-->
+<!--                            th:utext="${quotes.stdCountryCode}"/>-->
+                <option value="none" >선택</option>
+                <option value="KRW" name="KRW">한국(KRW)</option>
+                <option value="JPY" name="JPY">일본(JPY)</option>
+                <option value="PHP" name="PHP">필리핀(PHP)</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>환율:</td>
+        <td>
+            <span name="currencyRate" id="currencyRate" ></span>
+        </td>
+    </tr>
+    <tr>
+        <td>송금액:</td>
+        <td><input type="text" name="remittance" id = "remittance"> USD</td>
+    </tr>
+    <tr>
+        <td><input name="submit" id = "submit" type="submit" value="submit" /></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <span name="receivedAmount" id="receivedAmount" ></span>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#stdCountryCode").on('change', function() {
+            getCurrencyRate();
+        });
+        $("#submit").on('click', function() {
+            getReceivedAmount();
+        });
+    });
+
+    /* 숫자 천단위로 콤마찍어주는 정규식 */
+    function numberFormat(inputNumber) {
+       return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    /* 국가코드 변경 시 작동 되는 함수 (환율 리턴) */
+    function getCurrencyRate() {
+        var stdCountryCode = $("#stdCountryCode").val();
+        if(stdCountryCode == null || stdCountryCode == 'none') {
+            $("#currencyRate").html('');
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "/getCurrencyRate",
+                data: { stdCountryCode },
+                dataType:'text',
+                success: function(data){
+                    var tData = numberFormat(data)
+                    $("#currencyRate").html(tData + ' ' +stdCountryCode +' / USD');
+                },
+                error: function(request,status,error)
+                {
+                    alert("error");
+                },
+                complete: function(){
+                }
+            });
+        }
+    }
+
+    /*
+     * summit 버튼 클릭시 작동 되는 함수
+     * 국가코드와 송금액을 받아와 계산하여 수취금액 리턴턴
+    */
+    function getReceivedAmount(){
+        var stdCountryCode = $("#stdCountryCode").val();
+        var remittance = $("#remittance").val();
+        if(remittance < 0 || remittance > 10000) {
+            alert("송금액이 바르지 않습니다");
+        }
+        else if (stdCountryCode == null || stdCountryCode == 'none'){
+            alert("환율이 올바르지 않습니다.");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/getReceivedAmount",
+                data: { stdCountryCode , remittance },
+                dataType:'text',
+                success: function(data){
+                    var tData = numberFormat(data)
+                    $("#receivedAmount").html('수취금액은 ' + tData + ' ' +stdCountryCode +' 입니다');
+                },
+                error: function(request,status,error)
+                {
+                    alert("error");
+                },
+                complete: function(){
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
