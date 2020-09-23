@@ -8,3 +8,5 @@
 - Gradle
 - Spring Boot 2.3.4
 - Java 8
+- Thymeleaf
+- H2 DB
