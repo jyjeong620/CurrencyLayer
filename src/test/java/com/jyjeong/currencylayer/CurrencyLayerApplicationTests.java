@@ -46,9 +46,9 @@ class CurrencyLayerApplicationTests {
 
 	@Test
 	public void getReceivedAmount() throws Exception {
-		mockMvc.perform(post("/getReceivedAmount")
-				.param("stdCountryName","KRW")
-				.param("remittance","1000"))
+		mockMvc.perform(post("/getReceivedAmount?stdCountryCode=KRW&remittance=1000"))
+//				.param("stdCountryName","KRW")
+//				.param("remittance","1000"))
 				.andDo(print())
 				.andExpect(status().isOk());
 

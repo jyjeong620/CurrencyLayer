@@ -2,6 +2,7 @@ package com.jyjeong.currencylayer.common;
 
 import com.jyjeong.currencylayer.dto.DataDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,7 +15,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -54,10 +54,15 @@ public class DatabaseConfig implements ApplicationRunner {
 //            stmt.execute("INSERT INTO CURRENCYINFO VALUES('PHP' ,48.480501)");
 
         } catch (Exception e){
-            e.printStackTrace();
+            log.error("Repo DB Setting Error.");
+            log.error(ExceptionUtils.getStackTrace(e));
         }
     }
 
+    /**
+     * API를 이용해 환율정보를 가져와 반환
+     * @return
+     */
     public ResponseEntity getAllCurrencyRate(){
         RestTemplate restTemplate = new RestTemplate();
         UriComponents apiUrl = UriComponentsBuilder.fromHttpUrl(environment.getProperty("API_URL"))
@@ -66,15 +71,15 @@ public class DatabaseConfig implements ApplicationRunner {
                 .queryParam("source",environment.getProperty("API_SOURCE"))
                 .queryParam("format",environment.getProperty("API_FORMAT"))
                 .build(false);    //자동으로 encode해주는 것을 막기 위해 false
-        log.info("API Get :: GET URL : " + apiUrl.toUriString());
+        log.info("CurrencyLayer API Get :: GET URL : " + apiUrl.toUriString());
         ResponseEntity<DataDto> dataDto = restTemplate.getForEntity(apiUrl.toUriString(), DataDto.class);
 
         if(!dataDto.getBody().isSuccess()){
-            //에러처리
+            log.error("CurrencyLayer API GET :: Failed ");
             return null;
         }
         else {
-            log.info("API GET :: SUCCESS ");
+            log.debug("CurrencyLayer API GET :: Success ");
             return dataDto;
         }
     }

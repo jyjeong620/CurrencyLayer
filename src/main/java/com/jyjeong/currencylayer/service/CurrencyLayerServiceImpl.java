@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -18,25 +19,21 @@ public class CurrencyLayerServiceImpl implements CurrencyLayerService {
     QuotesRepository quotesRepository;
 
     /**
-     * 저장된 국가코드, 환율 반환
-     * @return List<QuotesDto>
-     */
-    @Override
-    public List<QuotesDto> getQuotes(){
-        List<QuotesDto> quotesDto = quotesRepository.findAll();
-        return quotesDto;
-    }
-
-    /**
      * 매계변수로 받아온 국가코드에 대한 환율 반환
      * @param stdCountryCode 국가코드
      * @return 환율(소수점 2자리까지)
      */
     @Override
     public BigDecimal getCurrencyRate(String stdCountryCode) {
-        BigDecimal currencyRate = quotesRepository.findById(stdCountryCode).get().getCurrencyRate();
-        log.info("환율 : " + currencyRate.setScale(2, BigDecimal.ROUND_DOWN));
-        return currencyRate;
+        Optional<QuotesDto> getQuotes = null;
+        if(( getQuotes = quotesRepository.findById(stdCountryCode)) != null) {
+            BigDecimal currencyRate = getQuotes.get().getCurrencyRate();
+            log.debug("환율 : " + currencyRate.setScale(2, BigDecimal.ROUND_DOWN));
+            return currencyRate;
+        } else {
+            log.error("환율 정보를 가져올 수 없습니다.");
+            return null;
+        }
     }
 
     /**
@@ -48,7 +45,7 @@ public class CurrencyLayerServiceImpl implements CurrencyLayerService {
     @Override
     public BigDecimal getReceivedAmount(BigDecimal currencyRate, BigDecimal remittance) {
         BigDecimal receivedAmount = remittance.multiply(currencyRate).setScale(2, BigDecimal.ROUND_DOWN);
-        log.info("수취금액 : " + receivedAmount);
+        log.debug("수취금액 : " + receivedAmount);
         return receivedAmount;
     }
 }

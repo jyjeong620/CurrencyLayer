@@ -35,11 +35,13 @@ public class CurrencyLayerController {
     public BigDecimal getCurrencyInfo(
             @RequestParam(value = "stdCountryCode") String stdCountryCode
     ){
-        log.info("set stdCountryCode = " + stdCountryCode);
-        if(currencylayerService.getCurrencyRate(stdCountryCode) != null){
-            return currencylayerService.getCurrencyRate(stdCountryCode).setScale(2, BigDecimal.ROUND_DOWN);
+        log.debug("set stdCountryCode = " + stdCountryCode);
+        BigDecimal currencyRate = currencylayerService.getCurrencyRate(stdCountryCode);
+        if(currencyRate != null){
+            return currencyRate.setScale(2, BigDecimal.ROUND_DOWN);
         }
         else {
+            log.error("currencyRate is null");
             return null;
         }
     }
@@ -57,9 +59,10 @@ public class CurrencyLayerController {
             @RequestParam(value = "stdCountryCode") String stdCountryCode,
             @RequestParam(value = "remittance") BigDecimal remittance
     ){
-        log.info("set currencyRate : " + currencylayerService.getCurrencyRate(stdCountryCode));
-        log.info("set remittance : " + remittance);
+        BigDecimal currencyRate = currencylayerService.getCurrencyRate(stdCountryCode);
+        log.debug("set currencyRate : " + currencyRate);
+        log.debug("set remittance : " + remittance);
 
-        return currencylayerService.getReceivedAmount(currencylayerService.getCurrencyRate(stdCountryCode),remittance);
+        return currencylayerService.getReceivedAmount(currencyRate,remittance);
     }
 }
