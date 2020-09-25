@@ -25,8 +25,8 @@ public class CurrencyLayerServiceImpl implements CurrencyLayerService {
      */
     @Override
     public BigDecimal getCurrencyRate(String stdCountryCode) {
-        Optional<QuotesDto> getQuotes = null;
-        if(( getQuotes = quotesRepository.findById(stdCountryCode)) != null) {
+        Optional<QuotesDto> getQuotes = quotesRepository.findById(stdCountryCode);
+        if(getQuotes != null) {
             BigDecimal currencyRate = getQuotes.get().getCurrencyRate();
             log.debug("환율 : " + currencyRate.setScale(2, BigDecimal.ROUND_DOWN));
             return currencyRate;
