@@ -4,6 +4,7 @@ import com.jyjeong.currencylayer.dto.DataDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
@@ -25,8 +26,22 @@ public class DatabaseConfig implements ApplicationRunner {
     @Autowired
     DataSource dataSource;
 
-    @Autowired
-    Environment environment;
+    @Value("${api.url}")
+    private String apiUrl;
+
+    @Value("${api.access.key}")
+    private String apiAccessKey;
+
+    @Value("${api.currencies}")
+    private String apiCurrencies;
+
+    @Value("${api.source}")
+    private String apiSource;
+
+    @Value("${api.format}")
+    private String apiFormat;
+
+
 
     /**
      * 프로그램 시작시 API 호출하여 받아온 데이터를 DB에 저장
@@ -64,15 +79,19 @@ public class DatabaseConfig implements ApplicationRunner {
      * @return
      */
     public ResponseEntity getAllCurrencyRate(){
+
+
+
+
         RestTemplate restTemplate = new RestTemplate();
-        UriComponents apiUrl = UriComponentsBuilder.fromHttpUrl(environment.getProperty("API_URL"))
-                .queryParam("access_key", environment.getProperty("API_ACCESS_KEY"))
-                .queryParam("currencies",environment.getProperty("API_CURRENCIES"))
-                .queryParam("source",environment.getProperty("API_SOURCE"))
-                .queryParam("format",environment.getProperty("API_FORMAT"))
+        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .queryParam("access_key", apiAccessKey)
+                .queryParam("currencies",apiCurrencies)
+                .queryParam("source",apiSource)
+                .queryParam("format",apiFormat)
                 .build(false);    //자동으로 encode해주는 것을 막기 위해 false
-        log.info("CurrencyLayer API Get :: GET URL : " + apiUrl.toUriString());
-        ResponseEntity<DataDto> dataDto = restTemplate.getForEntity(apiUrl.toUriString(), DataDto.class);
+        log.info("CurrencyLayer API Get :: GET URL : " + uriComponents.toUriString());
+        ResponseEntity<DataDto> dataDto = restTemplate.getForEntity(uriComponents.toUriString(), DataDto.class);
 
         if(!dataDto.getBody().isSuccess()){
             log.error("CurrencyLayer API GET :: Failed ");
