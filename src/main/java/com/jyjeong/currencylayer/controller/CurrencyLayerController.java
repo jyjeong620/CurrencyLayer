@@ -42,7 +42,7 @@ public class CurrencyLayerController {
         }
         else {
             log.error("currencyRate is null");
-            return null;
+            return BigDecimal.ZERO;
         }
     }
 

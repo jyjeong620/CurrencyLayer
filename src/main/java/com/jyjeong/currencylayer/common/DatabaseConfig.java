@@ -79,10 +79,6 @@ public class DatabaseConfig implements ApplicationRunner {
      * @return
      */
     public ResponseEntity getAllCurrencyRate(){
-
-
-
-
         RestTemplate restTemplate = new RestTemplate();
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .queryParam("access_key", apiAccessKey)

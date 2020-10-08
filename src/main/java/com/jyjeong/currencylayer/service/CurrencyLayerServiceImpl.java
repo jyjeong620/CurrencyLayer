@@ -32,7 +32,7 @@ public class CurrencyLayerServiceImpl implements CurrencyLayerService {
             return currencyRate;
         } else {
             log.error("환율 정보를 가져올 수 없습니다.");
-            return null;
+            return BigDecimal.ZERO;
         }
     }
 
