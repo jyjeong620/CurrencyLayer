@@ -46,7 +46,7 @@ class CurrencyLayerApplicationTests {
 
 	@Test
 	public void getReceivedAmount() throws Exception {
-		mockMvc.perform(post("/getReceivedAmount?stdCountryCode=KRW&remittance=1000"))
+		mockMvc.perform(get("/getReceivedAmount?stdCountryCode=KRW&remittance=1000"))
 //				.param("stdCountryName","KRW")
 //				.param("remittance","1000"))
 				.andDo(print())
@@ -71,7 +71,7 @@ class CurrencyLayerApplicationTests {
 		System.out.println("@@@Quotes.getCur : " + response.getBody().getQuotes().toString());
 
 		for( String key : response.getBody().getQuotes().keySet()){
-			System.out.println("INSERT INTO CURRENCYINFO VALUES('"+key.replace("USD","")+"' ,"+response.getBody().getQuotes().get(key));
+			System.out.println("INSERT INTO CURRENCYINFO VALUES('" + key.replace("USD","") + "' ," + response.getBody().getQuotes().get(key) + ")");
 		}
 
 	}

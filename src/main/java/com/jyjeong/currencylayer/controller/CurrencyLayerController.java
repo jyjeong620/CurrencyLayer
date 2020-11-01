@@ -53,7 +53,7 @@ public class CurrencyLayerController {
      * @param remittance 송금액
      * @return 수취금액
      */
-    @PostMapping("/receivedAmount")
+    @GetMapping("/receivedAmount")
     @ResponseBody
     public BigDecimal getReceivedAmount(
             @RequestParam(value = "stdCountryCode") String stdCountryCode,
