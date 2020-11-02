@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -40,7 +41,6 @@ public class DatabaseConfig implements ApplicationRunner {
 
     @Value("${api.format}")
     private String apiFormat;
-
 
 
     /**
@@ -91,7 +91,7 @@ public class DatabaseConfig implements ApplicationRunner {
 
         if(!dataDto.getBody().isSuccess()){
             log.error("CurrencyLayer API GET :: Failed ");
-            return null;
+            return new ResponseEntity<>("에러", HttpStatus.BAD_REQUEST);
         }
         else {
             log.debug("CurrencyLayer API GET :: Success ");
