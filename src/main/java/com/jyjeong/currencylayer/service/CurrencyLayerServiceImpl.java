@@ -3,6 +3,8 @@ package com.jyjeong.currencylayer.service;
 
 import com.jyjeong.currencylayer.dto.QuotesDto;
 import com.jyjeong.currencylayer.repository.QuotesRepository;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,11 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CurrencyLayerServiceImpl implements CurrencyLayerService {
 
-    @Autowired
-    QuotesRepository quotesRepository;
+
+    public final QuotesRepository quotesRepository;
 
     /**
      * 매계변수로 받아온 국가코드에 대한 환율 반환

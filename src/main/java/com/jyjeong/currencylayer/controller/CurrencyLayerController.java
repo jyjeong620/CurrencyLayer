@@ -1,6 +1,7 @@
 package com.jyjeong.currencylayer.controller;
 
 import com.jyjeong.currencylayer.service.CurrencyLayerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +11,10 @@ import java.math.BigDecimal;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class CurrencyLayerController {
 
-    @Autowired
-    CurrencyLayerService currencylayerService;
+    public final CurrencyLayerService currencylayerService;
 
     /**
      * 메인화면
