@@ -19,6 +19,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -60,7 +61,7 @@ public class DatabaseConfig implements ApplicationRunner {
 
 
             ResponseEntity<DataDto> responseEntity = getAllCurrencyRate();
-            for( String key : responseEntity.getBody().getQuotes().keySet()){
+            for( String key : Objects.requireNonNull(responseEntity.getBody()).getQuotes().keySet()){
                 stmt.execute("INSERT INTO CURRENCYINFO VALUES('"+key.replace("USD","")+"' ,"+responseEntity.getBody().getQuotes().get(key)+")");
             }
 
